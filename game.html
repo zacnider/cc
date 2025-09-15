@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chog Cross Gambling</title>
+        <link rel="icon" href="sprites/favicon.ico" type="image/x-icon">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
+        <link rel="stylesheet" href="css/reset.css" type="text/css">
+        <link rel="stylesheet" href="css/main.css" type="text/css">
+        <link rel="stylesheet" href="css/orientation_utils.css" type="text/css">
+        <link rel="stylesheet" href="css/privy-wallet.css" type="text/css">
+        <!-- Google Fonts - Orbitron -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+        <meta name="msapplication-tap-highlight" content="no"/>
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="theme-color" content="#000000">
+
+        <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/createjs-2015.11.26.min.js"></script>
+        <script type="text/javascript" src="js/howler.min.js"></script>
+        <script type="text/javascript" src="js/screenfull.js"></script>
+        <script type="text/javascript" src="js/ctl_utils.js"></script>
+        <script type="text/javascript" src="js/sprite_lib.js"></script>
+        <script type="text/javascript" src="js/settings.js"></script>
+        <script type="text/javascript" src="js/GameConfig.js"></script>
+        <script type="text/javascript" src="js/GameManager.js"></script>
+        <script type="text/javascript" src="js/ModernUtils.js"></script>
+        <script type="text/javascript" src="js/CGameES6.js"></script>
+        <script type="text/javascript" src="js/WarningSuppressor.js"></script>
+        <script type="text/javascript" src="js/ErrorLogger.js"></script>
+        <script type="text/javascript" src="js/CLang.js"></script>
+        <script type="text/javascript" src="js/CPreloader.js"></script>
+        <script type="text/javascript" src="js/CMain.js"></script>
+        <script type="text/javascript" src="js/CTextButton.js"></script>
+        <script type="text/javascript" src="js/CToggle.js"></script>
+        <script type="text/javascript" src="js/CGfxButton.js"></script>
+        <script type="text/javascript" src="js/CMenu.js"></script>
+        <script type="text/javascript" src="js/CGame.js"></script>
+        <script type="text/javascript" src="js/CInterface.js"></script>
+        <script type="text/javascript" src="js/CSeaAnimation.js"></script>
+        <script type="text/javascript" src="js/CCharacter.js"></script>
+        <script type="text/javascript" src="js/CRiverAnimation.js"></script>
+    <script type="text/javascript" src="js/CSharkAnimation.js"></script>
+    <script type="text/javascript" src="js/CSharkAttackAnimation.js"></script>
+        <script type="text/javascript" src="js/CObstacle.js"></script>
+        <script type="text/javascript" src="js/CHowToPanel.js"></script>
+        <script type="text/javascript" src="js/CCreditsPanel.js"></script>
+        <script type="text/javascript" src="js/CEndPanel.js"></script>
+        <script type="text/javascript" src="js/CHelpPanel.js"></script>
+        <script type="text/javascript" src="js/CMsgBox.js"></script>
+        
+    <!-- Social Features Scripts -->
+    <script type="text/javascript" src="js/SocialFeatures.js"></script>
+    <script type="text/javascript" src="js/OnlinePlayerIndicator.js"></script>
+    <script type="text/javascript" src="js/GlobalLeaderboard.js"></script>
+    
+    <!-- JSON Database Scripts -->
+    <script type="text/javascript" src="js/JSONLeaderboard.js"></script>
+    <script type="text/javascript" src="js/CLeaderboard.js"></script>
+    
+    <!-- Wallet Integration Scripts -->
+    <script type="text/javascript" src="js/WalletManager.js"></script>
+    
+    <!-- React Privy Wallet Bundle -->
+    <script type="text/javascript" src="dist/wallet.bundle.js"></script>
+    
+    <!-- Initialize Social Features -->
+    <script type="text/javascript">
+        // Initialize Social Features when page loads
+        window.addEventListener('load', function() {
+            try {
+                // Initialize Social Features
+                if (window.socialFeatures) {
+                    window.socialFeatures.init();
+                    console.log("🌟 Social Features system ready!");
+                }
+                
+                // Initialize JSON Leaderboard
+                if (window.jsonLeaderboard) {
+                    window.jsonLeaderboard.init();
+                    console.log("📊 JSON Leaderboard system ready!");
+                }
+                
+                // Initialize Wallet Manager
+                if (window.walletManager) {
+                    console.log("🔗 Wallet Manager system ready!");
+                }
+                
+                // Online Player Indicator will be initialized by CMenu
+                console.log("👥 Online Player Indicator will be initialized by menu system!");
+                
+            } catch (error) {
+                console.error("❌ Social Features initialization error:", error);
+            }
+        });
+    </script>
+
+    </head>
+    <body ondragstart="return false;" ondrop="return false;" >
+        <div style="position: fixed; background-color: transparent; top: 0px; left: 0px; width: 100%; height: 100%"></div>
+        <script>
+            $(document).ready(function () {
+                var oMain = new CMain({
+                    fullscreen:true, //SET THIS TO FALSE IF YOU DON'T WANT TO SHOW FULLSCREEN BUTTON
+                    check_orientation: true,     //SET TO FALSE IF YOU DON'T WANT TO SHOW ORIENTATION ALERT ON MOBILE DEVICES
+
+                });
+
+                $(oMain).on("start_session", function (evt) {
+                    if (getParamValue('ctl-arcade') === "true") {
+                        parent.__ctlArcadeStartSession();
+                    }
+                });
+
+                $(oMain).on("end_session", function (evt) {
+                    if (getParamValue('ctl-arcade') === "true") {
+                        parent.__ctlArcadeEndSession();
+                    }
+                });
+
+                $(oMain).on("restart_level", function (evt, iLevel) {
+                    if (getParamValue('ctl-arcade') === "true") {
+                        parent.__ctlArcadeRestartLevel({level: iLevel});
+                    }
+                });
+
+                $(oMain).on("save_score", function (evt, iScore) {
+                    if (getParamValue('ctl-arcade') === "true") {
+                        parent.__ctlArcadeSaveScore({score: iScore});
+                    }
+                });
+
+                $(oMain).on("show_interlevel_ad", function (evt) {
+                    if (getParamValue('ctl-arcade') === "true") {
+                        parent.__ctlArcadeShowInterlevelAD();
+                    }
+                });
+
+                $(oMain).on("share_event", function (evt, iScore) {
+                    if (getParamValue('ctl-arcade') === "true") {
+                        parent.__ctlArcadeShareEvent({img: TEXT_SHARE_IMAGE,
+                            title: TEXT_SHARE_TITLE,
+                            msg: TEXT_SHARE_MSG1 + iScore
+                                    + TEXT_SHARE_MSG2,
+                            msg_share: TEXT_SHARE_SHARE1
+                                    + iScore + TEXT_SHARE_SHARE1});
+                    }
+                });
+
+                if (isIOS()) {
+                    setTimeout(function () {
+                        sizeHandler();
+                    }, 200);
+                } else {
+                    sizeHandler();
+                }
+            });
+
+        </script>
+        
+        <div class="check-fonts">
+            <p class="check-font-1">test 1</p>
+        </div> 
+        
+        <!-- Privy Wallet Root -->
+        <div id="privy-wallet-root"></div>
+        
+        <!-- Game Canvas Area -->
+        <div id="game-container">
+            
+            <canvas id="canvas" class='ani_hack' width="1200" height="600"> </canvas>
+            
+            <!-- Fixed UI Area at Bottom of Game -->
+            <div id="ui-container">
+                <!-- Betting UI -->
+                <div id="betting-ui" class="ui-panel" style="display: none;">
+                    <div class="ui-content">
+                        <div class="bet-section">
+                            <div class="bet-label-container">
+                                <span class="bet-minmax">(1.0 - 5.0)</span>
+                                <label>BET:</label>
+                            </div>
+                            <div class="bet-controls">
+                                <button id="bet-minus" class="bet-btn">-</button>
+                                <div id="bet-display" class="bet-display">1.0 MON</div>
+                                <button id="bet-plus" class="bet-btn">+</button>
+                            </div>
+                        </div>
+                        <div class="difficulty-section">
+                            <label>MODE:</label>
+                            <div class="difficulty-controls">
+                                <button id="easy-mode" class="diff-btn active">EASY</button>
+                                <button id="hard-mode" class="diff-btn">HARD</button>
+                            </div>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="wallet-toggle" class="wallet-toggle-btn">WALLET</button>
+                            <button id="start-game" class="action-btn primary">START GAME</button>
+                            <button id="back-menu" class="action-btn secondary">BACK TO MENU</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game UI -->
+                <div id="game-ui" class="ui-panel" style="display: none;">
+                    <div class="ui-content">
+                        <div class="game-info">
+                            <div class="info-item">
+                                <span class="label">Bet:</span>
+                                <span id="game-bet">1.0 MON</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Mode:</span>
+                                <span id="game-mode">EASY</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Multiplier:</span>
+                                <span id="game-multiplier">1.3x</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Winnings:</span>
+                                <span id="game-winnings">1.3 MON</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Jumps:</span>
+                                <span id="game-jumps">0</span>
+                            </div>
+                        </div>
+                        <div class="game-actions">
+                            <button id="wallet-toggle-game" class="wallet-toggle-btn">WALLET</button>
+                            <button id="cashout-btn" class="action-btn danger cashout-button">CASHOUT</button>
+                            <button id="back-menu-game" class="action-btn secondary">BACK TO MENU</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div data-orientation="portrait" class="orientation-msg-container"><p class="orientation-msg-text">Please rotate your device</p></div>
+        <div id="block_game" style="position: fixed; background-color: transparent; top: 0px; left: 0px; width: 100%; height: 100%; display:none"></div>
+
+    </body>
+</html>

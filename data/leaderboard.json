@@ -1,0 +1,107 @@
+{
+  "games": [
+    {
+      "id": "game_001",
+      "playerName": "Player123",
+      "betAmount": 2.5,
+      "difficulty": "hard",
+      "multiplier": 3.2,
+      "winnings": 8.0,
+      "successfulJumps": 5,
+      "gameTime": 45,
+      "isWin": true,
+      "timestamp": "2024-01-15T10:30:00Z",
+      "date": "2024-01-15"
+    },
+    {
+      "id": "game_002", 
+      "playerName": "Player456",
+      "betAmount": 1.0,
+      "difficulty": "easy",
+      "multiplier": 2.1,
+      "winnings": 2.1,
+      "successfulJumps": 3,
+      "gameTime": 32,
+      "isWin": true,
+      "timestamp": "2024-01-15T10:25:00Z",
+      "date": "2024-01-15"
+    }
+  ],
+  "leaderboard": {
+    "totalWinnings": [
+      {
+        "playerName": "Player123",
+        "totalWinnings": 8.0,
+        "gamesPlayed": 1
+      },
+      {
+        "playerName": "Player456", 
+        "totalWinnings": 2.1,
+        "gamesPlayed": 1
+      }
+    ],
+    "bestStreak": [
+      {
+        "playerName": "Player123",
+        "bestStreak": 5,
+        "date": "2024-01-15"
+      },
+      {
+        "playerName": "Player456",
+        "bestStreak": 3, 
+        "date": "2024-01-15"
+      }
+    ],
+    "highestMultiplier": [
+      {
+        "playerName": "Player123",
+        "highestMultiplier": 3.2,
+        "betAmount": 2.5,
+        "date": "2024-01-15"
+      },
+      {
+        "playerName": "Player456",
+        "highestMultiplier": 2.1,
+        "betAmount": 1.0,
+        "date": "2024-01-15"
+      }
+    ],
+    "mostRisky": [
+      {
+        "playerName": "Player123",
+        "highestBet": 2.5,
+        "difficulty": "hard",
+        "date": "2024-01-15"
+      },
+      {
+        "playerName": "Player456",
+        "highestBet": 1.0,
+        "difficulty": "easy",
+        "date": "2024-01-15"
+      }
+    ],
+    "fastestTime": [
+      {
+        "playerName": "Player456",
+        "fastestTime": 32,
+        "jumps": 3,
+        "date": "2024-01-15"
+      },
+      {
+        "playerName": "Player123",
+        "fastestTime": 45,
+        "jumps": 5,
+        "date": "2024-01-15"
+      }
+    ]
+  },
+  "statistics": {
+    "totalGames": 2,
+    "totalWinnings": 10.1,
+    "averageMultiplier": 2.65,
+    "lastUpdated": "2024-01-15T10:30:00Z"
+  }
+}
+
+
+
