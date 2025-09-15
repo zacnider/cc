@@ -101,6 +101,3 @@ Chog Cross is a skill-based gambling game where players:
 
 ---
 
-**Happy Gaming! 🐔🎮**
-
-*Remember: This is a gambling game. Play responsibly and only bet what you can afford to lose.*
