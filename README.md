@@ -1,4 +1,4 @@
-# 🐔 Chog Cross Gambling Game
+#  Chog Cross Gambling Game
 
 A web-based gambling game where players control a character jumping across platforms with cryptocurrency betting mechanics.
 
