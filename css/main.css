@@ -1,0 +1,1221 @@
+:root {
+    --primary-color: #FFD700;
+    --secondary-color: #00FF00;
+    --danger-color: #FF0000;
+    --background-dark: rgba(0,0,0,0.9);
+    --text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+}
+
+body{
+    background-color: #000;
+    background-repeat: repeat-x;
+    background-position: top;   
+}
+
+*, *:before, *:after {
+   -webkit-user-select: none;
+   -khtml-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+    
+input, input:before, input:after {
+   -webkit-user-select: initial;
+   -khtml-user-select: initial;
+   -moz-user-select: initial;
+   -ms-user-select: initial;
+   user-select: initial;
+}
+
+::selection { background: transparent;color:inherit; }
+::-moz-selection { background: transparent;color:inherit; }
+
+/* Game Container */
+#game-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Wallet Container - Top Panel */
+#wallet-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: linear-gradient(135deg, #1a0b3d 0%, #2d1b69 50%, #4a0e4e 100%);
+    border-bottom: 2px solid #FFD700;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.5);
+    z-index: 1001;
+}
+
+.wallet-panel {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wallet-content {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.wallet-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.wallet-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-connected {
+    color: #00FF00;
+    font-size: 12px;
+    animation: pulse 2s infinite;
+}
+
+.status-disconnected {
+    color: #FF4444;
+    font-size: 12px;
+}
+
+#wallet-text {
+    color: #FFFFFF;
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#wallet-address-text {
+    color: #FFD700;
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 400;
+    background: rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,215,0,0.3);
+}
+
+.wallet-balance {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.balance-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.balance-label {
+    color: #CCCCCC;
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.balance-value {
+    color: #FFD700;
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.profit-positive {
+    color: #00FF00 !important;
+}
+
+.profit-negative {
+    color: #FF4444 !important;
+}
+
+.profit-neutral {
+    color: #CCCCCC !important;
+}
+
+.wallet-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.wallet-btn {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+    min-width: 120px;
+    height: 35px;
+}
+
+.connect-btn {
+    background: #FFD700;
+    color: #000;
+    border-color: #FFD700;
+}
+
+.connect-btn:hover {
+    background: #FFA500;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.disconnect-btn {
+    background: rgba(255,102,102,0.8);
+    color: #FFFFFF;
+    border-color: #FF6666;
+}
+
+.disconnect-btn:hover {
+    background: rgba(255,102,102,1);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.wallet-btn:active {
+    transform: scale(0.95);
+}
+
+#canvas{
+    position: absolute;
+    top: 0px; /* Canvas'ı daha da aşağı kaydırdık (70px - 70px) */
+    left: 0;
+    width: 100%;
+    height: calc(100% - 60px); /* Wallet panel (70px) - Boşluk (70px) + Bottom UI (60px) */
+    background-color: #000;
+    object-fit: contain; /* Oranları koru, ekranı kapla */
+    object-position: center; /* Merkeze hizala */
+    image-rendering: pixelated; /* Pixel art için */
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+    z-index: 500; /* Canvas'ı UI panellerinin arasında görünür yapmak için */
+}
+
+canvas {
+    image-rendering: optimizeSpeed;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+    -ms-interpolation-mode: nearest-neighbor;
+    -ms-touch-action: none;
+    touch-action: none;
+    display: block;
+    width: 100% !important;
+    height: calc(100% - 60px) !important;
+    object-fit: contain;
+    background-color: #000;
+    z-index: 500; /* Canvas'ı UI panellerinin arasında görünür yapmak için */
+}
+
+/* Fixed UI Container */
+#ui-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60px; /* Bet UI yüksekliğini 80px'den 60px'e düşürdük */
+    background: linear-gradient(135deg, #1a0b3d 0%, #2d1b69 50%, #4a0e4e 100%);
+    border-top: 2px solid #FFD700;
+    box-shadow: 0 -3px 15px rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: visible; /* Her zaman görünür */
+}
+
+/* UI Panels */
+.ui-panel {
+    width: 100%;
+    max-width: 1200px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ui-content {
+    width: 100%;
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* Betting UI Styles - Horizontal Layout */
+.bet-section, .difficulty-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bet-label-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bet-minmax {
+    color: #FFD700;
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+.bet-section label, .difficulty-section label {
+    color: #FFFFFF;
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    min-width: 50px;
+}
+
+.bet-controls, .difficulty-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.bet-btn, .diff-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid #FFD700;
+    color: #FFD700;
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 40px;
+    height: 40px;
+}
+
+.bet-btn:hover, .diff-btn:hover {
+    background: rgba(255,215,0,0.2);
+    transform: scale(1.05);
+}
+
+.bet-btn:active, .diff-btn:active {
+    transform: scale(0.95);
+}
+
+.diff-btn.active {
+    background: #FFD700;
+    color: #000;
+}
+
+#bet-amount {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid #FFD700;
+    color: #000;
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-align: center;
+    width: 80px;
+    height: 40px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+    min-width: 100px;
+    height: 45px;
+}
+
+.action-btn.primary {
+    background: #FFD700;
+    color: #000;
+    border-color: #FFD700;
+}
+
+.action-btn.secondary {
+    background: rgba(255,102,102,0.8);
+    color: #FFFFFF;
+    border-color: #FF6666;
+}
+
+.action-btn.danger {
+    background: linear-gradient(45deg, #44ff44, #00cc00);
+    color: #FFFFFF;
+    border-color: #00cc00;
+}
+
+.action-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.action-btn.danger:hover {
+    background: linear-gradient(45deg, #66ff66, #00ff00);
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+/* Game UI Styles - Horizontal Layout */
+.game-info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.info-item .label {
+    color: #CCCCCC;
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.info-item span:not(.label) {
+    color: #FFD700;
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+#game-winnings {
+    color: #00FF00 !important;
+}
+
+#game-multiplier {
+    color: #FFD700 !important;
+}
+
+.game-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    #wallet-container {
+        height: 60px;
+    }
+    
+    #ui-container {
+        height: 50px; /* Mobilde bet UI'yi daha da küçültük */
+    }
+    
+    #canvas {
+        top: 0px; /* Mobilde de daha da aşağı kaydırdık (60px - 60px) */
+        height: calc(100% - 50px); /* Wallet (60px) - Boşluk (60px) + UI (50px) */
+    }
+    
+    canvas {
+        height: calc(100% - 50px) !important;
+    }
+    
+    .wallet-content {
+        padding: 0 10px;
+        gap: 10px;
+    }
+    
+    .wallet-balance {
+        gap: 10px;
+    }
+    
+    .balance-label {
+        font-size: 10px;
+    }
+    
+    .balance-value {
+        font-size: 12px;
+    }
+    
+    .wallet-btn {
+        font-size: 12px;
+        padding: 6px 12px;
+        min-width: 100px;
+        height: 30px;
+    }
+    
+    #wallet-text {
+        font-size: 12px;
+    }
+    
+    #wallet-address-text {
+        font-size: 10px;
+    }
+}
+    
+    .ui-content {
+        padding: 5px 10px;
+        gap: 10px;
+    }
+    
+    .bet-section, .difficulty-section {
+        gap: 4px;
+    }
+    
+    .bet-minmax {
+        font-size: 12px;
+    }
+    
+    .bet-section label, .difficulty-section label {
+        font-size: 14px;
+        min-width: 40px;
+    }
+    
+    .bet-btn, .diff-btn {
+        font-size: 14px;
+        padding: 4px 8px;
+        min-width: 35px;
+        height: 35px;
+    }
+    
+    #bet-amount {
+        font-size: 14px;
+        padding: 4px 8px;
+        width: 70px;
+        height: 35px;
+    }
+    
+    .action-btn {
+        font-size: 14px;
+        padding: 6px 12px;
+        min-width: 80px;
+        height: 35px;
+    }
+    
+    .game-info {
+        gap: 10px;
+    }
+    
+    .info-item .label {
+        font-size: 12px;
+    }
+    
+    .info-item span:not(.label) {
+        font-size: 14px;
+    }
+}
+
+/* Full screen optimization */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000;
+}
+
+.ani_hack{
+    -webkit-perspective: 1000px;
+    -webkit-backface-visibility: hidden;
+    
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent; /* mobile webkit */
+}
+
+/***************FONTS*******************/
+.check-fonts{
+                position: fixed;
+                opacity:0;
+}
+
+.check-font-1{
+        font-family: 'gomarice_rocks-webfont';
+}
+                
+                
+@font-face {
+    font-family: 'gomarice_rocks-webfont';
+    src: url('gomarice_rocks-webfont.woff2') format('woff2'),
+         url('gomarice_rocks-webfont.woff') format('woff'),
+         url('gomarice_rocks-webfont.svg#gomarice_rocks-webfont') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+/* Bet Display Styling */
+#bet-display {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    color: #ecf0f1;
+    font-family: 'gomarice_rocks-webfont', monospace;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 12px;
+    width: 80px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+#bet-display:hover {
+    border-color: #f39c12;
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+}
+
+/* Mobile bet display styling */
+@media (max-width: 768px) {
+    #bet-display {
+        font-size: 18px;
+        padding: 12px 16px;
+        width: 100px;
+        height: 45px;
+    }
+}
+
+/* Gambling UI Styles */
+.gambling-panel {
+    background: var(--background-dark);
+    border: 2px solid var(--primary-color);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.gambling-button {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-shadow: var(--text-shadow);
+    user-select: none;
+}
+
+.gambling-button:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 10px currentColor;
+}
+
+.gambling-button:active {
+    transform: scale(0.95);
+}
+
+.bet-input-field {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    background: rgba(255,255,255,0.95);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.difficulty-easy {
+    color: var(--secondary-color) !important;
+    text-shadow: 0 0 8px var(--secondary-color);
+}
+
+.difficulty-hard {
+    color: var(--danger-color) !important;
+    text-shadow: 0 0 8px var(--danger-color);
+}
+
+.game-ui-panel {
+    background: rgba(0,0,0,0.8);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.cashout-button {
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    background: linear-gradient(45deg, #44ff44, #00cc00);
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+}
+
+.cashout-button:hover {
+    background: linear-gradient(45deg, #66ff66, #00ff00);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
+}
+
+.cashout-button:disabled {
+    background: linear-gradient(45deg, #666666, #444444) !important;
+    color: #999999 !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    transform: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+.cashout-button:disabled:hover {
+    background: linear-gradient(45deg, #666666, #444444) !important;
+    transform: none !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    .gambling-panel {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .gambling-button {
+        font-size: 22px !important;
+        padding: 10px 16px;
+    }
+    
+    .bet-input-field {
+        min-height: 50px;
+        font-size: 24px !important;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .gambling-button {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 10px 15px;
+    }
+    
+    .gambling-button:active {
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+    }
+}
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    canvas {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Performance optimizations */
+.gambling-panel,
+.game-ui-panel,
+.cashout-button {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Game Over Screen Button Enhancements */
+.game-over-button {
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    min-width: 80px !important;
+    min-height: 80px !important;
+    cursor: pointer;
+}
+
+.game-over-button:hover {
+    filter: drop-shadow(0 6px 12px rgba(255,215,0,0.4));
+    transform: scale(1.05);
+}
+
+.game-over-button:active {
+    transform: scale(0.95);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+/* Game Over HTML Buttons */
+.game-over-btn {
+    font-family: 'Orbitron', monospace !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3) !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+.game-over-btn:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4) !important;
+}
+
+.game-over-btn:active {
+    transform: scale(0.95) !important;
+}
+
+/* Mobile-specific button enhancements */
+@media (max-width: 768px) {
+    .game-over-btn {
+        font-size: 16px !important;
+        padding: 12px 20px !important;
+        min-width: 120px !important;
+        min-height: 45px !important;
+    }
+    
+    #game-over-buttons {
+        gap: 15px !important;
+        top: 200px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-over-btn {
+        font-size: 14px !important;
+        padding: 10px 16px !important;
+        min-width: 100px !important;
+        min-height: 40px !important;
+    }
+    
+    #game-over-buttons {
+        gap: 10px !important;
+        top: 180px !important;
+        flex-direction: column !important;
+    }
+}
+
+/* Enhanced button glow effect */
+.button-glow {
+    box-shadow: 0 0 20px rgba(255,215,0,0.3);
+    animation: buttonPulse 2s infinite;
+}
+
+@keyframes buttonPulse {
+    0% { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+    50% { box-shadow: 0 0 30px rgba(255,215,0,0.5); }
+    100% { box-shadow: 0 0 20px rgba(255,215,0,0.3); }
+}
+
+/* Achievement Notification Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* Achievement Notification Styles */
+.achievement-notification {
+    border: 2px solid #FFD700;
+    animation: slideInRight 0.5s ease-out;
+}
+
+.achievement-notification:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 20px rgba(255,215,0,0.4);
+}
+
+/* Social Features Styles */
+.social-features-container {
+    background: linear-gradient(135deg, #1A0B3D, #2D1B69);
+    border: 2px solid #FFD700;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 10px;
+}
+
+.social-features-title {
+    color: #FFD700;
+    font-family: 'Orbitron', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.achievement-badge {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #000;
+    border-radius: 50px;
+    padding: 8px 16px;
+    font-family: 'Orbitron', monospace;
+    font-weight: 700;
+    display: inline-block;
+    margin: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.achievement-badge.unlocked {
+    background: linear-gradient(135deg, #00FF00, #00CC00);
+    color: #000;
+}
+
+.achievement-badge.locked {
+    background: linear-gradient(135deg, #666666, #444444);
+    color: #999999;
+}
+
+/* Online Player Indicator */
+.online-indicator {
+    background: rgba(0,0,0,0.8);
+    border: 1px solid #FFD700;
+    border-radius: 20px;
+    padding: 5px 15px;
+    color: #FFFFFF;
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.online-indicator .green-light {
+    width: 8px;
+    height: 8px;
+    background: #00FF00;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Weekly Challenge Styles */
+.weekly-challenge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid #FFD700;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    color: #FFFFFF;
+}
+
+.weekly-challenge-title {
+    color: #FFD700;
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.weekly-challenge-description {
+    color: #CCCCCC;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.weekly-challenge-reward {
+    color: #00FF00;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.weekly-challenge-leader {
+    color: #FFD700;
+    font-weight: 700;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+/* Social Sharing Modal */
+.sharing-modal {
+    backdrop-filter: blur(5px);
+}
+
+.sharing-modal .modal-content {
+    background: linear-gradient(135deg, #1A0B3D, #2D1B69);
+    border: 2px solid #FFD700;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.sharing-modal .share-button {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.sharing-modal .share-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.sharing-modal .share-button:active {
+    transform: scale(0.95);
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    .gambling-button,
+    .cashout-button,
+    .game-over-button {
+        transition: none;
+    }
+    
+    .gambling-button:hover,
+    .game-over-button:hover {
+        transform: none;
+    }
+    
+    .button-glow {
+        animation: none;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+.gambling-button:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Text selection improvements for gambling UI */
+.gambling-panel *,
+.game-ui-panel * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Loading states */
+.gambling-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* ===== MOBILE RESPONSIVE DESIGN ===== */
+
+/* Mobile Canvas and Layout Optimizations */
+@media (max-width: 768px) {
+    /* Wallet panel mobile optimizations */
+    #wallet-container {
+        height: 60px; /* Daha küçük wallet panel */
+    }
+    
+    .wallet-content {
+        padding: 0 10px;
+        gap: 10px;
+    }
+    
+    .wallet-balance {
+        gap: 10px;
+    }
+    
+    .balance-label {
+        font-size: 10px;
+    }
+    
+    .balance-value {
+        font-size: 12px;
+    }
+    
+    .wallet-btn {
+        font-size: 12px;
+        padding: 6px 12px;
+        min-width: 100px;
+        height: 30px;
+    }
+    
+    /* Canvas mobile optimizations */
+    #canvas {
+        height: calc(100vh - 110px) !important; /* Wallet + UI panels için yer bırak */
+        width: 100vw !important;
+        object-fit: contain;
+        top: 60px !important; /* Wallet panel yüksekliği kadar aşağı kaydır */
+    }
+    
+    canvas {
+        height: calc(100vh - 110px) !important;
+        width: 100vw !important;
+        object-fit: contain;
+    }
+    
+    /* UI container mobile optimizations */
+    #ui-container {
+        height: 50px; /* Mobilde daha küçük */
+        padding: 5px 10px;
+    }
+    
+    .ui-content {
+        padding: 5px 10px;
+        gap: 10px;
+    }
+    
+    /* Bet controls mobile */
+    .bet-controls {
+        gap: 5px;
+    }
+    
+    .bet-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+    }
+    
+    .bet-display {
+        font-size: 12px;
+        padding: 5px 8px;
+    }
+    
+    /* Action buttons mobile */
+    .action-btn {
+        font-size: 12px;
+        padding: 8px 12px;
+        min-width: 80px;
+    }
+    
+    /* Difficulty buttons mobile */
+    .diff-btn {
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    #wallet-container {
+        height: 55px; /* Daha küçük wallet panel */
+    }
+    
+    #ui-container {
+        height: 45px; /* Daha küçük UI panel */
+    }
+    
+    #canvas {
+        height: calc(100vh - 100px) !important;
+        top: 55px !important;
+    }
+    
+    canvas {
+        height: calc(100vh - 100px) !important;
+    }
+    
+    .wallet-status {
+        gap: 5px;
+    }
+    
+    .status-text {
+        font-size: 12px;
+    }
+    
+    .address-value {
+        font-size: 10px;
+    }
+    
+    .ui-content {
+        padding: 3px 5px;
+        gap: 5px;
+    }
+    
+    .bet-section, .difficulty-section {
+        gap: 5px;
+    }
+    
+    .bet-label-container {
+        font-size: 10px;
+    }
+    
+    .bet-minmax {
+        font-size: 8px;
+    }
+    
+    .action-btn {
+        font-size: 10px;
+        padding: 6px 10px;
+        min-width: 70px;
+    }
+}
+
+/* Touch-friendly button sizes */
+@media (hover: none) and (pointer: coarse) {
+    .bet-btn, .diff-btn, .action-btn {
+        min-height: 44px; /* iOS touch target minimum */
+        min-width: 44px;
+    }
+    
+    .wallet-btn {
+        min-height: 44px;
+    }
+}
+    cursor: wait;
+}
+
+/* Success/Error states */
+.gambling-success {
+    color: var(--secondary-color) !important;
+    text-shadow: 0 0 10px var(--secondary-color);
+}
+
+.gambling-error {
+    color: var(--danger-color) !important;
+    text-shadow: 0 0 10px var(--danger-color);
+}
